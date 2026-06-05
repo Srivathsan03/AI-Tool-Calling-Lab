@@ -5,9 +5,17 @@ An Android application demonstrating the integration of the Google GenAI (Gemini
 ## Features
 
 - **Interactive AI Chat**: Submit text prompts to the Gemini 2.5 Flash model and receive real-time responses.
+- **ViewModel Architecture**:
+    - Centralized UI state management using `MainViewModel`.
+    - Business logic separation from the UI layer.
+    - Lifecycle-aware operations using `viewModelScope`.
+- **Robust Error Handling**:
+    - **Automatic Retries**: Implements exponential backoff for `429 Quota Exceeded` errors.
+    - **Safe Networking**: Prevents `NetworkOnMainThreadException` by using `Dispatchers.IO` for blocking API calls inside the ViewModel.
+    - **Client Validation**: Gracefully handles and displays client-side and server-side errors.
 - **Modern Android Stack**:
     - Built with **Jetpack Compose** and **Material 3**.
-    - Lifecycle-aware coroutines using `rememberCoroutineScope`.
+    - Responsive UI with scrolling support and loading states.
     - Secure API key management via `local.properties`.
 
 ## Prerequisites
@@ -31,32 +39,32 @@ An Android application demonstrating the integration of the Google GenAI (Gemini
 
 ## Project Structure
 
-- `MainActivity.kt`: Contains the main UI logic using Jetpack Compose and the integration with the GenAI Client.
+- `MainActivity.kt`: Entry point that sets up the UI and provides the `MainViewModel`.
+- `MainViewModel.kt`: Manages the AI response state, loading status, and the API interaction logic.
 - `build.gradle.kts` (app): Configures the build process and injects the API key from `local.properties` into `BuildConfig`.
 - `libs.versions.toml`: Manages project dependencies and versions.
 
 ## Key Implementation Details
 
-### Handling Quota Limits (429)
-The application includes a retry loop to handle the free-tier rate limits (e.g., 5 requests per minute):
+### State Management
+The UI state is exposed via `MutableState` within the `MainViewModel`:
 ```kotlin
-while (attempt < maxAttempts) {
-    try {
-        // ... API Call ...
-    } catch (e: ClientException) {
-        if (e.code() == 429 && attempt < maxAttempts - 1) {
-            delay(currentDelay)
-            currentDelay *= 2
-            attempt++
-            continue
+class MainViewModel : ViewModel() {
+    val response: MutableState<String> = mutableStateOf("")
+    var isPending: MutableState<Boolean> = mutableStateOf(false)
+    
+    fun onButtonClick(prompt: String) {
+        isPending.value = true
+        viewModelScope.launch {
+            response.value = geminiResponse(prompt)
+            isPending.value = false
         }
-        // ... Handle other errors ...
     }
 }
 ```
 
 ### Main Thread Safety
-Since the `google-genai` library uses blocking OkHttp calls, we ensure thread safety using `withContext(Dispatchers.IO)`:
+Since the `google-genai` library uses blocking OkHttp calls, we ensure thread safety using `withContext(Dispatchers.IO)` inside the ViewModel:
 ```kotlin
 suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO) {
     // Blocking network call happens here safely
@@ -68,7 +76,7 @@ suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO)
 
 - `com.google.genai:google-genai:1.57.0`
 - `androidx.compose.material3:material3`
-- `androidx.activity:activity-compose`
+- `androidx.lifecycle:lifecycle-viewmodel-ktx`
 - `com.squareup.okhttp3:okhttp`
 
 ## License
