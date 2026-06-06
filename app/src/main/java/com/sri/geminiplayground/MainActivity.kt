@@ -106,9 +106,9 @@ fun Playground(modifier: Modifier = Modifier, viewModel: MainViewModel? = null) 
             onClick = {
                 viewModel?.onButtonClick(
                     prompt = promptTextFieldState.text.toString(),
-                    temperature = temperatureTextFieldState.text.toString().toFloat(),
-                    topK = topKTextFieldState.text.toString().toFloat(),
-                    topP = topPTextFieldState.text.toString().toFloat()
+                    temperature = temperatureTextFieldState.text.toString().toFloatOrNull() ?: 0f,
+                    topK = topKTextFieldState.text.toString().toFloatOrNull() ?: 5f,
+                    topP = topPTextFieldState.text.toString().toFloatOrNull() ?: 0.9f
                 )
             },
             enabled = !(viewModel?.isPending?.value ?: false)
