@@ -55,10 +55,15 @@ class MainViewModel : ViewModel() {
     val response: MutableState<String> = mutableStateOf("")
     var isPending: MutableState<Boolean> = mutableStateOf(false)
     
-    fun onButtonClick(prompt: String) {
+    fun onButtonClick(
+        prompt: String,
+        temperature: Float,
+        topK: Float,
+        topP: Float
+    ) {
         isPending.value = true
         viewModelScope.launch {
-            response.value = geminiResponse(prompt)
+            response.value = geminiResponse(prompt, temperature, topK, topP)
             isPending.value = false
         }
     }
@@ -70,7 +75,7 @@ Since the `google-genai` library uses blocking OkHttp calls, we ensure thread sa
 ```kotlin
 suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO) {
     // Blocking network call happens here safely
-    client.models.generateContent(...)
+    client.models.generateContent(modelId, prompt, config)
 }
 ```
 
