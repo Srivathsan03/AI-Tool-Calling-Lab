@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
     fun onButtonClick(
         prompt:String,
         temperature: Float,
-        topK: Int,
+        topK: Float,
         topP: Float
     ) {
         isPending.value = true
@@ -33,7 +33,7 @@ class MainViewModel : ViewModel() {
     suspend fun geminiResponse(
         prompt: String,
         temperature: Float,
-        topK: Int,
+        topK: Float,
         topP: Float
     ): String = withContext(Dispatchers.IO) {
         val client = Client.builder()
@@ -50,7 +50,9 @@ class MainViewModel : ViewModel() {
                     "gemini-2.5-flash",
                     prompt,
                     GenerateContentConfig.builder()
-                        .temperature(0.5f)
+                        .temperature(temperature)
+                        .topK(topK)
+                        .topP(topP)
                         .build()
                 )
                 return@withContext response.text() ?: "Empty response"

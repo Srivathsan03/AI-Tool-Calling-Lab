@@ -107,7 +107,7 @@ fun Playground(modifier: Modifier = Modifier, viewModel: MainViewModel? = null) 
                 viewModel?.onButtonClick(
                     prompt = promptTextFieldState.text.toString(),
                     temperature = temperatureTextFieldState.text.toString().toFloat(),
-                    topK = topKTextFieldState.text.toString().toInt(),
+                    topK = topKTextFieldState.text.toString().toFloat(),
                     topP = topPTextFieldState.text.toString().toFloat()
                 )
             },
