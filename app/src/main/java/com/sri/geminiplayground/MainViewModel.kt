@@ -26,15 +26,19 @@ class MainViewModel : ViewModel() {
     val configPopupVisible: MutableState<Boolean> = mutableStateOf(false)
     lateinit var config: GenerateContentConfig
 
+    init {
+        createConfig()
+    }
+
     fun onConfigClicked() {
         configPopupVisible.value = !configPopupVisible.value
     }
 
     fun createConfig(
-        systemPrompt: String,
-        temperature: Float,
-        topK: Float,
-        topP: Float
+        systemPrompt: String = "",
+        temperature: Float = 0.1f,
+        topK: Float = 5f,
+        topP: Float = .9f
     ) {
         config = GenerateContentConfig.builder()
             .temperature(temperature)

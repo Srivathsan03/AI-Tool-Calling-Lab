@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -129,7 +130,8 @@ fun ConfigPopup(viewModel: MainViewModel) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = systemPromptTextFieldState,
-                    label = { Text(text = "System Prompt") }
+                    label = { Text(text = "System Prompt") },
+                    lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 3)
                 )
                 val temperatureTextFieldState = rememberTextFieldState()
                 TextField(
