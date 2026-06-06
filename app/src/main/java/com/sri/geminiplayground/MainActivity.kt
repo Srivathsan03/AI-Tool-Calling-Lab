@@ -4,25 +4,35 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModelProvider
 import com.sri.geminiplayground.ui.theme.GeminiPlaygroundTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -34,94 +44,154 @@ class MainActivity : ComponentActivity() {
         val viewModel: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
             GeminiPlaygroundTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Playground(
-                        modifier = Modifier.padding(innerPadding),
-                        viewModel = viewModel
-                    )
-                }
+                Playground(
+                    viewModel = viewModel
+                )
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Playground(modifier: Modifier = Modifier, viewModel: MainViewModel? = null) {
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val promptTextFieldState = rememberTextFieldState()
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = promptTextFieldState,
-            enabled = !(viewModel?.isPending?.value ?: false),
-            label = { Text(text = "Prompt") }
-        )
-        val temperatureTextFieldState = rememberTextFieldState()
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = temperatureTextFieldState,
-            enabled = !(viewModel?.isPending?.value ?: false),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text(text = "Temperature") },
-            placeholder = { Text(text = "e.g. 0.5") },
-            inputTransformation = InputTransformation {
-                if (asCharSequence().any { !it.isDigit() && it != '.' }) {
-                    revertAllChanges()
+fun Playground(viewModel: MainViewModel) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "Gemini Playground")
+                },
+                actions = {
+                    TextButton(onClick = {
+                        viewModel.onConfigClicked()
+                    }) {
+                        Text(text = "Config")
+                    }
                 }
-            }
-        )
-        val topKTextFieldState = rememberTextFieldState()
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = topKTextFieldState,
-            enabled = !(viewModel?.isPending?.value ?: false),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text(text = "Top K") },
-            placeholder = { Text(text = "e.g. 5") },
-            inputTransformation = InputTransformation {
-                if (asCharSequence().any { !it.isDigit() }) {
-                    revertAllChanges()
-                }
-            }
-        )
-        val topPTextFieldState = rememberTextFieldState()
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            state = topPTextFieldState,
-            enabled = !(viewModel?.isPending?.value ?: false),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            label = { Text(text = "Top P") },
-            placeholder = { Text(text = "e.g. 0.9") },
-            inputTransformation = InputTransformation {
-                if (asCharSequence().any { !it.isDigit() && it != '.' }) {
-                    revertAllChanges()
-                }
-            }
-        )
-        Button(
-            onClick = {
-                viewModel?.onButtonClick(
-                    prompt = promptTextFieldState.text.toString(),
-                    temperature = temperatureTextFieldState.text.toString().toFloatOrNull() ?: 0f,
-                    topK = topKTextFieldState.text.toString().toFloatOrNull() ?: 5f,
-                    topP = topPTextFieldState.text.toString().toFloatOrNull() ?: 0.9f
-                )
-            },
-            enabled = !(viewModel?.isPending?.value ?: false)
-        ) {
-            Text(
-                text = if (viewModel?.isPending?.value ?: false) "Thinking..." else "Submit"
             )
         }
-        MarkdownText(
-            markdown =
-                if (viewModel?.isPending?.value ?: false) ""
-                else viewModel?.response?.value ?: ""
-        )
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val promptTextFieldState = rememberTextFieldState()
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                state = promptTextFieldState,
+                enabled = !viewModel.isPending.value,
+                label = { Text(text = "Prompt") }
+            )
+            Button(
+                onClick = {
+                    viewModel.onButtonClick(
+                        prompt = promptTextFieldState.text.toString()
+                    )
+                },
+                enabled = !viewModel.isPending.value
+            ) {
+                Text(
+                    text = if (viewModel.isPending.value) "Thinking..." else "Submit"
+                )
+            }
+            MarkdownText(
+                modifier = Modifier.fillMaxWidth(),
+                markdown =
+                    if (viewModel.isPending.value) ""
+                    else viewModel.response.value
+            )
+        }
+        ConfigPopup(viewModel = viewModel)
+    }
+}
+
+@Composable
+fun ConfigPopup(viewModel: MainViewModel) {
+    if (viewModel.configPopupVisible.value) {
+        Dialog(
+            onDismissRequest = {
+                viewModel.configPopupVisible.value = false
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(color = MaterialTheme.colorScheme.background)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val systemPromptTextFieldState = rememberTextFieldState()
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = systemPromptTextFieldState,
+                    label = { Text(text = "System Prompt") }
+                )
+                val temperatureTextFieldState = rememberTextFieldState()
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = temperatureTextFieldState,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    label = { Text(text = "Temperature") },
+                    placeholder = { Text(text = "e.g. 0.5") },
+                    inputTransformation = InputTransformation {
+                        if (asCharSequence().any { (!it.isDigit() && it != '.') }) {
+                            revertAllChanges()
+                        }
+                    }
+                )
+                val topKTextFieldState = rememberTextFieldState()
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = topKTextFieldState,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    label = { Text(text = "Top K") },
+                    placeholder = { Text(text = "e.g. 5") },
+                    inputTransformation = InputTransformation {
+                        if (asCharSequence().any { !it.isDigit() }) {
+                            revertAllChanges()
+                        }
+                    }
+                )
+                val topPTextFieldState = rememberTextFieldState()
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = topPTextFieldState,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    label = { Text(text = "Top P") },
+                    placeholder = { Text(text = "e.g. 0.9") },
+                    inputTransformation = InputTransformation {
+                        if (asCharSequence().any { (!it.isDigit() && it != '.') }) {
+                            revertAllChanges()
+                        }
+                    }
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.configPopupVisible.value = false
+                            viewModel.createConfig(
+                                systemPrompt = systemPromptTextFieldState.text.toString(),
+                                temperature = temperatureTextFieldState.text.toString()
+                                    .toFloatOrNull()
+                                    ?: 0f,
+                                topK = topKTextFieldState.text.toString().toFloatOrNull() ?: 5f,
+                                topP = topPTextFieldState.text.toString().toFloatOrNull() ?: 0.9f
+                            )
+                        }
+                    ) {
+                        Text("Save")
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -129,6 +199,6 @@ fun Playground(modifier: Modifier = Modifier, viewModel: MainViewModel? = null) 
 @Composable
 fun Preview_Playground() {
     GeminiPlaygroundTheme {
-        Playground()
+        Playground(viewModel = MainViewModel())
     }
 }

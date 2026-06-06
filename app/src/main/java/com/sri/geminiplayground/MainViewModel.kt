@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.genai.Client
 import com.google.genai.errors.ClientException
+import com.google.genai.types.Content
 import com.google.genai.types.GenerateContentConfig
+import com.google.genai.types.Part
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,32 +16,53 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class MainViewModel : ViewModel() {
 
+    private val client by lazy {
+        Client.builder()
+            .apiKey(BuildConfig.GEMINI_API_KEY)
+            .build()
+    }
     val response: MutableState<String> = mutableStateOf("")
-    var isPending: MutableState<Boolean> = mutableStateOf(false)
+    val isPending: MutableState<Boolean> = mutableStateOf(false)
+    val configPopupVisible: MutableState<Boolean> = mutableStateOf(false)
+    lateinit var config: GenerateContentConfig
 
-    fun onButtonClick(
-        prompt:String,
+    fun onConfigClicked() {
+        configPopupVisible.value = !configPopupVisible.value
+    }
+
+    fun createConfig(
+        systemPrompt: String,
         temperature: Float,
         topK: Float,
         topP: Float
     ) {
+        config = GenerateContentConfig.builder()
+            .temperature(temperature)
+            .topK(topK)
+            .topP(topP)
+            .systemInstruction(
+                Content.fromParts(
+                    Part.fromText(
+                        systemPrompt
+                    )
+                )
+            )
+            .build()
+    }
+
+    fun onButtonClick(
+        prompt: String
+    ) {
         isPending.value = true
         viewModelScope.launch {
-            response.value = geminiResponse(prompt, temperature, topK, topP)
+            response.value = geminiResponse(prompt)
             isPending.value = false
         }
     }
 
     suspend fun geminiResponse(
-        prompt: String,
-        temperature: Float,
-        topK: Float,
-        topP: Float
+        prompt: String
     ): String = withContext(Dispatchers.IO) {
-        val client = Client.builder()
-            .apiKey(BuildConfig.GEMINI_API_KEY)
-            .build()
-
         var attempt = 0
         val maxAttempts = 3
         var currentDelay = 2000L
@@ -49,11 +72,7 @@ class MainViewModel : ViewModel() {
                 val response = client.models.generateContent(
                     "gemini-2.5-flash",
                     prompt,
-                    GenerateContentConfig.builder()
-                        .temperature(temperature)
-                        .topK(topK)
-                        .topP(topP)
-                        .build()
+                    config
                 )
                 return@withContext response.text() ?: "Empty response"
             } catch (e: ClientException) {
