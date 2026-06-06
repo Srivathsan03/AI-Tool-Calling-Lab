@@ -27,14 +27,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sri.geminiplayground.ui.theme.GeminiPlaygroundTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -42,7 +46,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val viewModel: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        val viewModel: MainViewModel =
+            ViewModelProvider(this, MainViewModel.Factory)[MainViewModel::class.java]
         setContent {
             GeminiPlaygroundTheme {
                 Playground(
@@ -114,6 +119,23 @@ fun Playground(viewModel: MainViewModel) {
 @Composable
 fun ConfigPopup(viewModel: MainViewModel) {
     if (viewModel.configPopupVisible.value) {
+        val savedSystemPrompt by viewModel.repository.systemPrompt.collectAsStateWithLifecycle("")
+        val savedTemperature by viewModel.repository.temperature.collectAsStateWithLifecycle(0.1f)
+        val savedTopK by viewModel.repository.topK.collectAsStateWithLifecycle(50f)
+        val savedTopP by viewModel.repository.topP.collectAsStateWithLifecycle(0.9f)
+
+        val systemPromptTextFieldState = rememberTextFieldState()
+        val temperatureTextFieldState = rememberTextFieldState()
+        val topKTextFieldState = rememberTextFieldState()
+        val topPTextFieldState = rememberTextFieldState()
+
+        LaunchedEffect(savedSystemPrompt, savedTemperature, savedTopK, savedTopP) {
+            systemPromptTextFieldState.edit { replace(0, length, savedSystemPrompt) }
+            temperatureTextFieldState.edit { replace(0, length, savedTemperature.toString()) }
+            topKTextFieldState.edit { replace(0, length, savedTopK.toInt().toString()) }
+            topPTextFieldState.edit { replace(0, length, savedTopP.toString()) }
+        }
+
         Dialog(
             onDismissRequest = {
                 viewModel.configPopupVisible.value = false
@@ -126,14 +148,12 @@ fun ConfigPopup(viewModel: MainViewModel) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                val systemPromptTextFieldState = rememberTextFieldState()
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = systemPromptTextFieldState,
                     label = { Text(text = "System Prompt") },
                     lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 3)
                 )
-                val temperatureTextFieldState = rememberTextFieldState()
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = temperatureTextFieldState,
@@ -146,7 +166,6 @@ fun ConfigPopup(viewModel: MainViewModel) {
                         }
                     }
                 )
-                val topKTextFieldState = rememberTextFieldState()
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = topKTextFieldState,
@@ -159,7 +178,6 @@ fun ConfigPopup(viewModel: MainViewModel) {
                         }
                     }
                 )
-                val topPTextFieldState = rememberTextFieldState()
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
                     state = topPTextFieldState,
@@ -179,11 +197,10 @@ fun ConfigPopup(viewModel: MainViewModel) {
                     Button(
                         onClick = {
                             viewModel.configPopupVisible.value = false
-                            viewModel.createConfig(
+                            viewModel.saveConfig(
                                 systemPrompt = systemPromptTextFieldState.text.toString(),
                                 temperature = temperatureTextFieldState.text.toString()
-                                    .toFloatOrNull()
-                                    ?: 0f,
+                                    .toFloatOrNull() ?: 0.1f,
                                 topK = topKTextFieldState.text.toString().toFloatOrNull() ?: 5f,
                                 topP = topPTextFieldState.text.toString().toFloatOrNull() ?: 0.9f
                             )
@@ -201,6 +218,10 @@ fun ConfigPopup(viewModel: MainViewModel) {
 @Composable
 fun Preview_Playground() {
     GeminiPlaygroundTheme {
-        Playground(viewModel = MainViewModel())
+        Playground(
+            viewModel = MainViewModel(
+                MainRepository(LocalContext.current)
+            )
+        )
     }
 }

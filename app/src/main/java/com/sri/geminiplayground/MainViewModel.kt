@@ -3,18 +3,37 @@ package com.sri.geminiplayground
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.genai.Client
 import com.google.genai.errors.ClientException
 import com.google.genai.types.Content
 import com.google.genai.types.GenerateContentConfig
 import com.google.genai.types.Part
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    val repository: MainRepository
+) : ViewModel() {
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(
+                modelClass: Class<T>,
+                extras: CreationExtras
+            ): T {
+                val application =
+                    checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
+                return MainViewModel(MainRepository(application)) as T
+            }
+        }
+    }
 
     private val client by lazy {
         Client.builder()
@@ -27,18 +46,27 @@ class MainViewModel : ViewModel() {
     lateinit var config: GenerateContentConfig
 
     init {
-        createConfig()
+        viewModelScope.launch {
+            combine(
+                repository.systemPrompt,
+                repository.temperature,
+                repository.topK,
+                repository.topP
+            ) { systemPrompt, temperature, topK, topP ->
+                updateConfig(systemPrompt, temperature, topK, topP)
+            }.collect { }
+        }
     }
 
     fun onConfigClicked() {
         configPopupVisible.value = !configPopupVisible.value
     }
 
-    fun createConfig(
-        systemPrompt: String = "",
-        temperature: Float = 0.1f,
-        topK: Float = 5f,
-        topP: Float = .9f
+    private fun updateConfig(
+        systemPrompt: String,
+        temperature: Float,
+        topK: Float,
+        topP: Float
     ) {
         config = GenerateContentConfig.builder()
             .temperature(temperature)
@@ -52,6 +80,20 @@ class MainViewModel : ViewModel() {
                 )
             )
             .build()
+    }
+
+    fun saveConfig(
+        systemPrompt: String = "",
+        temperature: Float = 0.1f,
+        topK: Float = 5f,
+        topP: Float = .9f
+    ) {
+        viewModelScope.launch {
+            repository.saveSystemPrompt(systemPrompt)
+            repository.saveTemperature(temperature)
+            repository.saveTopK(topK)
+            repository.saveTopP(topP)
+        }
     }
 
     fun onButtonClick(

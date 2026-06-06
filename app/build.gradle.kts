@@ -73,6 +73,8 @@ dependencies {
 
     implementation("com.github.jeziellago:compose-markdown:0.5.0")
 
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
