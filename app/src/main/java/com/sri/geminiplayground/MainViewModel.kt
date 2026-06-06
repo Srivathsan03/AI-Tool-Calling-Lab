@@ -17,15 +17,25 @@ class MainViewModel : ViewModel() {
     val response: MutableState<String> = mutableStateOf("")
     var isPending: MutableState<Boolean> = mutableStateOf(false)
 
-    fun onButtonClick(prompt:String) {
+    fun onButtonClick(
+        prompt:String,
+        temperature: Float,
+        topK: Int,
+        topP: Float
+    ) {
         isPending.value = true
         viewModelScope.launch {
-            response.value = geminiResponse(prompt)
+            response.value = geminiResponse(prompt, temperature, topK, topP)
             isPending.value = false
         }
     }
 
-    suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO) {
+    suspend fun geminiResponse(
+        prompt: String,
+        temperature: Float,
+        topK: Int,
+        topP: Float
+    ): String = withContext(Dispatchers.IO) {
         val client = Client.builder()
             .apiKey(BuildConfig.GEMINI_API_KEY)
             .build()
@@ -39,7 +49,9 @@ class MainViewModel : ViewModel() {
                 val response = client.models.generateContent(
                     "gemini-2.5-flash",
                     prompt,
-                    GenerateContentConfig.builder().build()
+                    GenerateContentConfig.builder()
+                        .temperature(0.5f)
+                        .build()
                 )
                 return@withContext response.text() ?: "Empty response"
             } catch (e: ClientException) {

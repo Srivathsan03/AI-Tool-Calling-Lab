@@ -13,10 +13,12 @@ An Android application demonstrating the integration of the Google GenAI (Gemini
     - **Automatic Retries**: Implements exponential backoff for `429 Quota Exceeded` errors.
     - **Safe Networking**: Prevents `NetworkOnMainThreadException` by using `Dispatchers.IO` for blocking API calls inside the ViewModel.
     - **Client Validation**: Gracefully handles and displays client-side and server-side errors.
+- **Markdown Support**: Rendered AI responses with full Markdown formatting for better readability using `compose-markdown`.
 - **Modern Android Stack**:
     - Built with **Jetpack Compose** and **Material 3**.
     - Responsive UI with scrolling support and loading states.
     - Secure API key management via `local.properties`.
+    - Integrated with **JitPack** for extended library support.
 
 ## Prerequisites
 
@@ -75,6 +77,7 @@ suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO)
 ## Dependencies
 
 - `com.google.genai:google-genai:1.57.0`
+- `com.github.jeziellago:compose-markdown:0.5.0`
 - `androidx.compose.material3:material3`
 - `androidx.lifecycle:lifecycle-viewmodel-ktx`
 - `com.squareup.okhttp3:okhttp`
