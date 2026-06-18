@@ -11,6 +11,7 @@ import com.google.genai.errors.ClientException
 import com.google.genai.types.Content
 import com.google.genai.types.GenerateContentConfig
 import com.google.genai.types.Part
+import com.sri.geminiplayground.tool.CalculatorTool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -101,9 +102,22 @@ class MainViewModel(
     ) {
         isPending.value = true
         viewModelScope.launch {
-            response.value = geminiResponse(prompt)
+            response.value = if (isMathExpression(prompt)) {
+                val calculatorTool = CalculatorTool()
+                calculatorTool.execute(prompt)
+            } else {
+                geminiResponse(prompt)
+            }
             isPending.value = false
         }
+    }
+
+    private fun isMathExpression(
+        prompt: String
+    ): Boolean {
+        return Regex(
+            """^\d+\s*[\+\-\*/]\s*\d+$"""
+        ).matches(prompt)
     }
 
     suspend fun geminiResponse(
@@ -116,7 +130,7 @@ class MainViewModel(
         while (attempt < maxAttempts) {
             try {
                 val response = client.models.generateContent(
-                    "gemini-2.5-flash",
+                    AIModel.GEMINI_3_1_FLASH_LITE.modelId,
                     prompt,
                     config
                 )
