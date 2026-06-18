@@ -1,24 +1,43 @@
 # Gemini Playground
 
-An Android application demonstrating the integration of the Google GenAI (Gemini) API with Jetpack Compose. This project showcases how to handle AI content generation.
+Gemini Playground is an Android application built for experimenting with Large Language Model (LLM) concepts using Google's Gemini API.
+
+The project serves as a learning laboratory for exploring prompt engineering, generation parameters, structured output, tool calling, and other modern AI application patterns.
 
 ## Features
 
-- **Interactive AI Chat**: Submit text prompts to the Gemini 2.5 Flash model and receive real-time responses.
-- **ViewModel Architecture**:
-    - Centralized UI state management using `MainViewModel`.
-    - Business logic separation from the UI layer.
-    - Lifecycle-aware operations using `viewModelScope`.
-- **Robust Error Handling**:
-    - **Automatic Retries**: Implements exponential backoff for `429 Quota Exceeded` errors.
-    - **Safe Networking**: Prevents `NetworkOnMainThreadException` by using `Dispatchers.IO` for blocking API calls inside the ViewModel.
-    - **Client Validation**: Gracefully handles and displays client-side and server-side errors.
-- **Markdown Support**: Rendered AI responses with full Markdown formatting for better readability using `compose-markdown`.
-- **Modern Android Stack**:
-    - Built with **Jetpack Compose** and **Material 3**.
-    - Responsive UI with scrolling support and loading states.
-    - Secure API key management via `local.properties`.
-    - Integrated with **JitPack** for extended library support.
+- Interactive AI Chat
+- Prompt Engineering Experiments
+- System Instruction Testing
+- Context Management Experiments
+- Temperature Control
+- TopP Control
+- TopK Control
+- Markdown Rendering
+- Robust Error Handling
+- Jetpack Compose UI
+
+## Tech Stack
+
+### Language
+- Kotlin
+
+### UI
+- Jetpack Compose
+- Material 3
+
+### Architecture
+- MVVM
+- Kotlin Coroutines
+
+### AI
+- Google GenAI SDK (Gemini)
+
+### Serialization
+- Kotlinx Serialization
+
+### Markdown Rendering
+- compose-markdown
 
 ## Prerequisites
 
@@ -39,53 +58,71 @@ An Android application demonstrating the integration of the Google GenAI (Gemini
 3.  **Sync and Run**:
     Sync the project with Gradle files and run the `app` module on an emulator or physical device.
 
+## AI Concepts Explored
+
+### Prompt Engineering
+Experimenting with prompt design techniques to influence model behavior and response quality.
+
+### System Instructions
+Using system-level instructions to define model behavior and response boundaries.
+
+### Context Management
+Passing conversation history to maintain continuity across interactions.
+
+### Generation Parameters
+Exploring the effects of:
+
+- Temperature
+- TopP
+- TopK
+
+on response creativity and determinism.
+
+### Structured Output
+Generating JSON responses and parsing them into Kotlin data models.
+
+### Tool Calling
+Experimenting with external tool execution and integrating tool results into AI workflows.
+
+### Error Handling
+Handling API failures, quota limits, and retry mechanisms.
+
+## Roadmap
+
+### Completed
+
+- [x] Basic Gemini Integration
+- [x] Prompt Engineering
+- [x] System Instructions
+- [x] Temperature Configuration
+- [x] TopP Configuration
+- [x] TopK Configuration
+- [x] Markdown Rendering
+- [x] Structured Output Experiments
+
+### In Progress
+
+- [ ] Calculator Tool
+- [ ] Function Calling
+- [ ] Tool Calling
+- [ ] Multi-Turn Context Experiments
+
+### Future Experiments
+
+- [ ] Multimodal Inputs
+- [ ] Streaming Responses
+- [ ] Local LLM Integration
+- [ ] MCP Integration
+- [ ] RAG Experiments
+
 ## Project Structure
 
-- `MainActivity.kt`: Entry point that sets up the UI and provides the `MainViewModel`.
-- `MainViewModel.kt`: Manages the AI response state, loading status, and the API interaction logic.
-- `build.gradle.kts` (app): Configures the build process and injects the API key from `local.properties` into `BuildConfig`.
-- `libs.versions.toml`: Manages project dependencies and versions.
-
-## Key Implementation Details
-
-### State Management
-The UI state is exposed via `MutableState` within the `MainViewModel`:
-```kotlin
-class MainViewModel : ViewModel() {
-    val response: MutableState<String> = mutableStateOf("")
-    var isPending: MutableState<Boolean> = mutableStateOf(false)
-    
-    fun onButtonClick(
-        prompt: String,
-        temperature: Float,
-        topK: Float,
-        topP: Float
-    ) {
-        isPending.value = true
-        viewModelScope.launch {
-            response.value = geminiResponse(prompt, temperature, topK, topP)
-            isPending.value = false
-        }
-    }
-}
-```
-
-### Main Thread Safety
-Since the `google-genai` library uses blocking OkHttp calls, we ensure thread safety using `withContext(Dispatchers.IO)` inside the ViewModel:
-```kotlin
-suspend fun geminiResponse(prompt: String): String = withContext(Dispatchers.IO) {
-    // Blocking network call happens here safely
-    client.models.generateContent(modelId, prompt, config)
-}
-```
-
-## Dependencies
-
-- `com.google.genai:google-genai:1.57.0`
-- `com.github.jeziellago:compose-markdown:0.5.0`
-- `androidx.compose.material3:material3`
-- `androidx.lifecycle:lifecycle-viewmodel-ktx`
-- `com.squareup.okhttp3:okhttp`
+- `MainActivity` - Application entry point.
+- `MainViewModel` - Manages UI state and AI interactions.
+- `GeminiRepository` - Handles Gemini API communication.
+- `Tool` - Defines the contract for application tools.
+- `ToolExecutor` - Executes registered tools.
+- `CalculatorTool` - Example tool used for tool-calling experiments.
 
 ## License
 
