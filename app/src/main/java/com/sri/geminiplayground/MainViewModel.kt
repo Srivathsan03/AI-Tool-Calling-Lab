@@ -116,7 +116,7 @@ class MainViewModel(
         prompt: String
     ): Boolean {
         return Regex(
-            """^\d+\s*[\+\-\*/]\s*\d+$"""
+            """^\d+\s*[+\-*/]\s*\d+$"""
         ).matches(prompt)
     }
 
