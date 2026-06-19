@@ -1,9 +1,12 @@
 package com.sri.geminiplayground.tool
 
+import com.google.gson.annotations.SerializedName
+
 data class WeatherResp(
     val current: Current
 )
 
 data class Current(
-    val temperature_2m: Double
+    @SerializedName("temperature_2m")
+    val temperature: Double
 )

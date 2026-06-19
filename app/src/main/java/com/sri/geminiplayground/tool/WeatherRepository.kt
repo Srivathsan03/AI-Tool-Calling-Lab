@@ -9,7 +9,7 @@ class WeatherRepository {
         )
         return """
             City: $city
-            Temperature: ${response.current.temperature_2m}°C
+            Temperature: ${response.current.temperature}°C
         """.trimIndent()
     }
 }
