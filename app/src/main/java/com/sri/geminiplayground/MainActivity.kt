@@ -119,10 +119,14 @@ fun Playground(viewModel: MainViewModel) {
 @Composable
 fun ConfigPopup(viewModel: MainViewModel) {
     if (viewModel.configPopupVisible.value) {
-        val savedSystemPrompt by viewModel.repository.systemPrompt.collectAsStateWithLifecycle("")
-        val savedTemperature by viewModel.repository.temperature.collectAsStateWithLifecycle(0.1f)
-        val savedTopK by viewModel.repository.topK.collectAsStateWithLifecycle(50f)
-        val savedTopP by viewModel.repository.topP.collectAsStateWithLifecycle(0.9f)
+        val savedSystemPrompt by viewModel.chatRunner.repository.systemPrompt.collectAsStateWithLifecycle(
+            ""
+        )
+        val savedTemperature by viewModel.chatRunner.repository.temperature.collectAsStateWithLifecycle(
+            0.1f
+        )
+        val savedTopK by viewModel.chatRunner.repository.topK.collectAsStateWithLifecycle(50f)
+        val savedTopP by viewModel.chatRunner.repository.topP.collectAsStateWithLifecycle(0.9f)
 
         val systemPromptTextFieldState = rememberTextFieldState()
         val temperatureTextFieldState = rememberTextFieldState()
@@ -220,7 +224,7 @@ fun Preview_Playground() {
     GeminiPlaygroundTheme {
         Playground(
             viewModel = MainViewModel(
-                MainRepository(LocalContext.current)
+                ChatRunner(MainRepository(LocalContext.current))
             )
         )
     }

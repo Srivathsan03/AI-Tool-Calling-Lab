@@ -1,11 +1,9 @@
 package com.sri.geminiplayground.tool
 
 class ToolRegistry(
-    private val tools: List<Tool>
+    private val tools: Map<String, Tool>
 ) {
     fun findTool(toolName: String): Tool? {
-        return tools.firstOrNull {
-            it.name == toolName
-        }
+        return tools[toolName]
     }
 }
