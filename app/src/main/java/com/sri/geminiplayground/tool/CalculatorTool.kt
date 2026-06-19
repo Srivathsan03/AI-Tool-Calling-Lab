@@ -4,7 +4,7 @@ class CalculatorTool : Tool {
 
     override val name = "calculator"
 
-    override fun execute(input: String?): String {
+    override suspend fun execute(input: String?): String {
         if (input.isNullOrBlank()) {
             return "Input cannot be empty"
         }
