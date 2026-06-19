@@ -67,8 +67,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation("com.google.genai:google-genai:1.57.0")
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.3.2"))
+    implementation("com.google.genai:google-genai:1.59.0")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.4.0"))
     implementation("com.squareup.okhttp3:okhttp")
 
     implementation("com.github.jeziellago:compose-markdown:0.5.0")
