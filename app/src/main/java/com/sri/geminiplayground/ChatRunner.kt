@@ -3,6 +3,8 @@ package com.sri.geminiplayground
 import com.google.genai.Client
 import com.google.genai.types.GenerateContentConfig
 import com.sri.geminiplayground.tool.CalculatorTool
+import com.sri.geminiplayground.tool.CurrencyRepository
+import com.sri.geminiplayground.tool.CurrencyTool
 import com.sri.geminiplayground.tool.ToolExecutor
 import com.sri.geminiplayground.tool.ToolRegistry
 import com.sri.geminiplayground.tool.WeatherRepository
@@ -15,7 +17,8 @@ class ChatRunner(
         ToolRegistry(
             mapOf(
                 "calculator" to CalculatorTool(),
-                "weather" to WeatherTool(WeatherRepository())
+                "weather" to WeatherTool(WeatherRepository()),
+                "currency" to CurrencyTool(CurrencyRepository())
             )
         )
     )
@@ -35,6 +38,10 @@ class ChatRunner(
                 toolExecutor.execute(toolName = "weather", input = "Chennai")
             }
 
+            isCurrencyRequest(prompt) -> {
+                toolExecutor.execute(toolName = "currency", input = prompt)
+            }
+
             else -> {
                 repository.geminiResponse(
                     model = model,
@@ -46,16 +53,20 @@ class ChatRunner(
         }
     }
 
-    private fun isMathExpression(
-        prompt: String
-    ): Boolean {
-        return Regex("""^\d+\s*[+\-*/]\s*\d+$""").matches(prompt)
+    private fun isMathExpression(prompt: String): Boolean {
+        return Regex(
+            """^\d+\s*[+\-*/]\s*\d+$"""
+        ).matches(prompt)
     }
 
-    private fun isWeatherRequest(
-        prompt: String
-    ): Boolean {
+    private fun isWeatherRequest(prompt: String): Boolean {
         val lower = prompt.lowercase()
         return lower.contains("weather")
+    }
+
+    private fun isCurrencyRequest(prompt: String): Boolean {
+        return Regex(
+            """^\d+(\.\d+)?\s+[A-Za-z]{3}\s+[A-Za-z]{3}$"""
+        ).matches(prompt)
     }
 }
