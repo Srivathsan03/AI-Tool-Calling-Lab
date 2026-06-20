@@ -67,16 +67,16 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation("com.google.genai:google-genai:1.59.0")
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:5.4.0"))
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation(libs.google.genai)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
 
-    implementation("com.github.jeziellago:compose-markdown:0.5.0")
+    implementation(libs.compose.markdown)
 
-    implementation("androidx.datastore:datastore-preferences:1.2.1")
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
