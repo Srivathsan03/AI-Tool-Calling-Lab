@@ -2,7 +2,7 @@
 
 Gemini Playground is an Android application built for experimenting with Large Language Model (LLM) concepts using Google's Gemini API.
 
-The project serves as a learning laboratory for exploring prompt engineering, generation parameters, structured output, tool calling, and other modern AI application patterns.
+The project serves as a hands-on learning laboratory for exploring modern AI application development, including prompt engineering, structured output, tool calling, context management, and agent architecture patterns.
 
 ## Features
 
@@ -13,6 +13,10 @@ The project serves as a learning laboratory for exploring prompt engineering, ge
 - Temperature Control
 - TopP Control
 - TopK Control
+- Calculator Tool
+- Weather Tool
+- Currency Tool
+- Tool Registry & Tool Executor Architecture
 - Markdown Rendering
 - Robust Error Handling
 - Jetpack Compose UI
@@ -28,10 +32,15 @@ The project serves as a learning laboratory for exploring prompt engineering, ge
 
 ### Architecture
 - MVVM
+- Repository Pattern
 - Kotlin Coroutines
 
 ### AI
 - Google GenAI SDK (Gemini)
+
+### Networking
+- Retrofit
+- Gson Converter
 
 ### Serialization
 - Kotlinx Serialization
@@ -87,6 +96,30 @@ Experimenting with external tool execution and integrating tool results into AI 
 ### Error Handling
 Handling API failures, quota limits, and retry mechanisms.
 
+## Tool Architecture
+
+```text
+User Prompt
+    ↓
+ChatRunner
+    ↓
+ToolExecutor
+    ↓
+ToolRegistry
+    ↓
+Selected Tool
+    ↓
+External API / Local Logic
+    ↓
+Response
+```
+
+### Implemented tools:
+
+- Calculator Tool
+- Weather Tool
+- Currency Tool
+
 ## Roadmap
 
 ### Completed
@@ -97,23 +130,25 @@ Handling API failures, quota limits, and retry mechanisms.
 - [x] Temperature Configuration
 - [x] TopP Configuration
 - [x] TopK Configuration
+- [x] Calculator Tool
+- [x] Weather Tool
+- [x] Currency Tool
+- [x] Tool Registry & Tool Executor Architecture
+- [x] Tool Selection Logic
 - [x] Markdown Rendering
-- [x] Structured Output Experiments
 
 ### In Progress
 
-- [ ] Calculator Tool
 - [ ] Function Calling
-- [ ] Tool Calling
 - [ ] Multi-Turn Context Experiments
 
 ### Future Experiments
 
 - [ ] Multimodal Inputs
-- [ ] Streaming Responses
 - [ ] Local LLM Integration
 - [ ] MCP Integration
 - [ ] RAG Experiments
+- [ ] Agentic Workflows
 
 ## Project Structure
 
@@ -121,8 +156,11 @@ Handling API failures, quota limits, and retry mechanisms.
 - `MainViewModel` - Manages UI state and AI interactions.
 - `GeminiRepository` - Handles Gemini API communication.
 - `Tool` - Defines the contract for application tools.
+- `ToolRegistry` - Stores available tools
 - `ToolExecutor` - Executes registered tools.
 - `CalculatorTool` - Example tool used for tool-calling experiments.
+- `WeatherTool` - Weather data retrieval
+- `CurrencyTool` - Currency conversion
 
 ## License
 
