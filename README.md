@@ -2,7 +2,7 @@
 
 Gemini Playground is an Android application built for experimenting with Large Language Model (LLM) concepts using Google's Gemini API.
 
-The project serves as a hands-on learning laboratory for exploring modern AI application development, including prompt engineering, structured output, tool calling, context management, and agent architecture patterns.
+The project serves as a hands-on learning laboratory for exploring modern AI application development, including prompt engineering, tool calling, context management, and agent architecture patterns.
 
 ## Features
 
@@ -16,6 +16,7 @@ The project serves as a hands-on learning laboratory for exploring modern AI app
 - Calculator Tool
 - Weather Tool
 - Currency Tool
+- News Tool
 - Tool Registry & Tool Executor Architecture
 - Markdown Rendering
 - Robust Error Handling
@@ -80,18 +81,17 @@ Passing conversation history to maintain continuity across interactions.
 
 ### Generation Parameters
 Exploring the effects of:
-
 - Temperature
 - TopP
 - TopK
 
 on response creativity and determinism.
 
-### Structured Output
-Generating JSON responses and parsing them into Kotlin data models.
-
 ### Tool Calling
 Experimenting with external tool execution and integrating tool results into AI workflows.
+
+### External API Integration
+Using Retrofit to connect AI tools with real-world data sources such as weather, currency, and news services.
 
 ### Error Handling
 Handling API failures, quota limits, and retry mechanisms.
@@ -133,6 +133,7 @@ Response
 - [x] Calculator Tool
 - [x] Weather Tool
 - [x] Currency Tool
+- [x] News Tool
 - [x] Tool Registry & Tool Executor Architecture
 - [x] Tool Selection Logic
 - [x] Markdown Rendering
@@ -161,6 +162,8 @@ Response
 - `CalculatorTool` - Example tool used for tool-calling experiments.
 - `WeatherTool` - Weather data retrieval
 - `CurrencyTool` - Currency conversion
+- `NewsTool` - Retrieves latest news headlines
+- `NewsRepository` - Handles Hacker News API communication
 
 ## License
 
