@@ -1,11 +1,11 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.weather
 
 class WeatherRepository {
 
-    suspend fun getWeather(city: String): String {
+    suspend fun getWeather(city: String, latitude: Double, longitude: Double): String {
         val response = WeatherApiRetrofitProvider.api.getWeather(
-            latitude = 13.0878,
-            longitude = 80.2785
+            latitude = latitude,
+            longitude = longitude
         )
         return """
             City: $city

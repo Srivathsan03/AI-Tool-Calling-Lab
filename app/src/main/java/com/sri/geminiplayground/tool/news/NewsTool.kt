@@ -1,10 +1,13 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.news
+
+import com.sri.geminiplayground.tool.Tool
 
 class NewsTool(
     private val newsRepository: NewsRepository
 ) : Tool {
 
     override val name = "news"
+    override val description = "Retrieves top hacker news stories"
 
     override suspend fun execute(input: String?): String {
         val topNews = newsRepository.getTopNews()

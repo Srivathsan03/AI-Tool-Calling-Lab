@@ -1,15 +1,19 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.currency
+
+import com.sri.geminiplayground.tool.Tool
 
 class CurrencyTool(
     private val currencyRepository: CurrencyRepository
 ) : Tool {
 
     override val name = "currency"
+    override val description =
+        "Converts currency from one to another. Expected format: amount FROM TO"
 
     override suspend fun execute(input: String?): String {
-        if(input == null) return "Invalid input"
+        if (input == null) return "Invalid input"
         val parts = input.split(" ")
-        if(parts.size != 3) {
+        if (parts.size != 3) {
             return "Expected format: amount FROM TO"
         }
         val amount = parts[0].toDoubleOrNull() ?: return "Invalid amount"

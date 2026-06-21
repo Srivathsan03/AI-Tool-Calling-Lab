@@ -1,8 +1,12 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.calculator
+
+import com.sri.geminiplayground.tool.Tool
 
 class CalculatorTool : Tool {
 
     override val name = "calculator"
+    override val description =
+        "Performs basic math calculations. Expected format: number symbol number"
 
     override suspend fun execute(input: String?): String {
         if (input.isNullOrBlank()) {

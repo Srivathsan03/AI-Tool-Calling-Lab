@@ -6,4 +6,8 @@ class ToolRegistry(
     fun findTool(toolName: String): Tool? {
         return tools[toolName]
     }
+
+    fun getAllTools(): List<Tool> {
+        return tools.values.toList()
+    }
 }

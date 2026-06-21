@@ -1,4 +1,4 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.currency
 
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,14 +1,14 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.news
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object CurrencyApiRetrofitProvider {
+object NewsApiRetrofitProvider {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.frankfurter.dev/")
+        .baseUrl("https://hacker-news.firebaseio.com/v0/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val api: CurrencyApi = retrofit.create(CurrencyApi::class.java)
+    val api: NewsApi = retrofit.create(NewsApi::class.java)
 }

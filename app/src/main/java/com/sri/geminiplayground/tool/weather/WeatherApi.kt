@@ -1,4 +1,4 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.weather
 
 import retrofit2.http.GET
 import retrofit2.http.Query

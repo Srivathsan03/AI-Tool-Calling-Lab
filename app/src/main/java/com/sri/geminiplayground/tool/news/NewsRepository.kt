@@ -1,4 +1,4 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.news
 
 class NewsRepository {
 

@@ -1,14 +1,14 @@
-package com.sri.geminiplayground.tool
+package com.sri.geminiplayground.tool.weather
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object NewsApiRetrofitProvider {
+object WeatherApiRetrofitProvider {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://hacker-news.firebaseio.com/v0/")
+        .baseUrl("https://api.open-meteo.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val api: NewsApi = retrofit.create(NewsApi::class.java)
+    val api: WeatherApi = retrofit.create(WeatherApi::class.java)
 }
