@@ -7,7 +7,7 @@ class CurrencyRepository {
         fromCurrency: String,
         toCurrency: String
     ): String {
-        val response = CurrencyApiRetrofit.api.convertCurrency(
+        val response = CurrencyApiRetrofitProvider.api.convertCurrency(
             amount = amount,
             fromCurrency = fromCurrency,
             toCurrency = toCurrency

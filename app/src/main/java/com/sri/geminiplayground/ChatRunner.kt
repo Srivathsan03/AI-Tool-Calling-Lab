@@ -5,6 +5,8 @@ import com.google.genai.types.GenerateContentConfig
 import com.sri.geminiplayground.tool.CalculatorTool
 import com.sri.geminiplayground.tool.CurrencyRepository
 import com.sri.geminiplayground.tool.CurrencyTool
+import com.sri.geminiplayground.tool.NewsRepository
+import com.sri.geminiplayground.tool.NewsTool
 import com.sri.geminiplayground.tool.ToolExecutor
 import com.sri.geminiplayground.tool.ToolRegistry
 import com.sri.geminiplayground.tool.WeatherRepository
@@ -18,7 +20,8 @@ class ChatRunner(
             mapOf(
                 "calculator" to CalculatorTool(),
                 "weather" to WeatherTool(WeatherRepository()),
-                "currency" to CurrencyTool(CurrencyRepository())
+                "currency" to CurrencyTool(CurrencyRepository()),
+                "news" to NewsTool(NewsRepository())
             )
         )
     )
@@ -40,6 +43,10 @@ class ChatRunner(
 
             isCurrencyRequest(prompt) -> {
                 toolExecutor.execute(toolName = "currency", input = prompt)
+            }
+
+            isNewsRequest(prompt) -> {
+                toolExecutor.execute(toolName = "news")
             }
 
             else -> {
@@ -68,5 +75,10 @@ class ChatRunner(
         return Regex(
             """^\d+(\.\d+)?\s+[A-Za-z]{3}\s+[A-Za-z]{3}$"""
         ).matches(prompt)
+    }
+
+    private fun isNewsRequest(prompt: String): Boolean {
+        val lower = prompt.lowercase()
+        return lower.contains("news")
     }
 }

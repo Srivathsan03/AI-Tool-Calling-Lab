@@ -3,12 +3,12 @@ package com.sri.geminiplayground.tool
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object WeatherApiRetrofit {
+object CurrencyApiRetrofitProvider {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.open-meteo.com/")
+        .baseUrl("https://api.frankfurter.dev/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val api: WeatherApi = retrofit.create(WeatherApi::class.java)
+    val api: CurrencyApi = retrofit.create(CurrencyApi::class.java)
 }
