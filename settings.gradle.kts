@@ -23,5 +23,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Gemini Playground"
+rootProject.name = "AI Tool Calling Lab"
 include(":app")

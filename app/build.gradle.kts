@@ -13,11 +13,11 @@ val geminiApiKey =
 
 
 android {
-    namespace = "com.sri.geminiplayground"
+    namespace = "com.sri.aitoolcallinglab"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.sri.geminiplayground"
+        applicationId = "com.sri.aitoolcallinglab"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
