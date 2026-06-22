@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.sri.aitoolcallinglab.ui.theme.GeminiPlaygroundTheme
+import com.sri.aitoolcallinglab.ui.theme.AiToolCallingTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 class MainActivity : ComponentActivity() {
@@ -34,8 +34,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val viewModel: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         setContent {
-            GeminiPlaygroundTheme {
-                Playground(
+            AiToolCallingTheme {
+                ScreenContent(
                     viewModel = viewModel
                 )
             }
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Playground(viewModel: MainViewModel) {
+fun ScreenContent(viewModel: MainViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -95,9 +95,9 @@ fun Playground(viewModel: MainViewModel) {
 
 @Preview(showBackground = true)
 @Composable
-fun Preview_Playground() {
-    GeminiPlaygroundTheme {
-        Playground(
+fun Preview_ScreenContent() {
+    AiToolCallingTheme {
+        ScreenContent(
             viewModel = MainViewModel()
         )
     }
