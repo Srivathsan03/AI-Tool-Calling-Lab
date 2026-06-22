@@ -20,7 +20,7 @@ The goal is to explore real-world AI application patterns such as tool calling, 
 
 | Weather Tool | Currency Tool | News Tool |
 |-------------|-------------|-------------|
-| ![Weather](screenshot/Weather.png) | ![Currency](screenshot/Currency.png) | ![News](screenshot/NEWS.png) |
+|![Weather](screenshot/Weather.png)|![Currency](screenshot/Currency.png)|![News](screenshot/NEWS.png)|
 
 ## Features
 
