@@ -10,18 +10,6 @@ The goal is to explore real-world AI application patterns such as tool calling, 
 
 ## Screenshots
 
-<p>
-<img src="screenshot/Weather.png" width="250"/>
-<img src="screenshot/Currency.png" width="250"/>
-<img src="screenshot/NEWS.png" width="250"/>
-</p>
-
-## Screenshots
-
-| Weather Tool | Currency Tool | News Tool |
-|-------------|-------------|-------------|
-| ![Weather](screenshot/Weather.png) | ![Currency](screenshot/Currency.png) | ![News](screenshot/NEWS.png) |
-
 <table>
   <tr>
     <td align="center">
