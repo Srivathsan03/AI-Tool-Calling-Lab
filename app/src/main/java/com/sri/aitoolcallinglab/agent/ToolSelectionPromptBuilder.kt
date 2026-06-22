@@ -31,6 +31,9 @@ object ToolSelectionPromptBuilder {
             appendLine("INPUT: <tool_input>")
             appendLine()
 
+            appendLine("Select exactly ONE tool.")
+            appendLine("Never return more than one TOOL block.")
+
             appendLine("Do not explain your decision.")
             appendLine("Do not include markdown.")
             appendLine("Do not include additional text.")

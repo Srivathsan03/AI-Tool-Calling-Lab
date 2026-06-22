@@ -8,8 +8,10 @@ import com.sri.aitoolcallinglab.tool.ToolRegistry
 import com.sri.aitoolcallinglab.tool.calculator.CalculatorTool
 import com.sri.aitoolcallinglab.tool.currency.CurrencyRepository
 import com.sri.aitoolcallinglab.tool.currency.CurrencyTool
+import com.sri.aitoolcallinglab.tool.date.DateTool
 import com.sri.aitoolcallinglab.tool.news.NewsRepository
 import com.sri.aitoolcallinglab.tool.news.NewsTool
+import com.sri.aitoolcallinglab.tool.time.TimeTool
 import com.sri.aitoolcallinglab.tool.weather.WeatherRepository
 import com.sri.aitoolcallinglab.tool.weather.WeatherTool
 
@@ -21,7 +23,9 @@ class ChatRunner {
             "calculator" to CalculatorTool(),
             "weather" to WeatherTool(WeatherRepository()),
             "currency" to CurrencyTool(CurrencyRepository()),
-            "news" to NewsTool(NewsRepository())
+            "news" to NewsTool(NewsRepository()),
+            "date" to DateTool(),
+            "time" to TimeTool()
         )
     )
 
