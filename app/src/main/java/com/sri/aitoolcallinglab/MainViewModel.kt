@@ -1,27 +1,46 @@
 package com.sri.aitoolcallinglab
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val chatRunner: ChatRunner
+) : ViewModel() {
 
-    val chatRunner = ChatRunner()
-
-    val response: MutableState<String> = mutableStateOf("")
-    val isPending: MutableState<Boolean> = mutableStateOf(false)
+    private val _uiState: MutableStateFlow<ChatUiState> = MutableStateFlow(ChatUiState())
+    val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     fun onButtonClick(
         prompt: String
     ) {
-        isPending.value = true
+        _uiState.value = _uiState.value.copy(isPending = true)
         viewModelScope.launch {
-            response.value = chatRunner.getResponse(
-                prompt = prompt
-            )
-            isPending.value = false
+            try {
+                val result = chatRunner.getResponse(prompt = prompt)
+                _uiState.value = _uiState.value.copy(
+                    response = result.answer,
+                    isPending = false
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    response = "Error: ${e.message}",
+                    isPending = false
+                )
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(ChatRunner()) as T
+            }
         }
     }
 }

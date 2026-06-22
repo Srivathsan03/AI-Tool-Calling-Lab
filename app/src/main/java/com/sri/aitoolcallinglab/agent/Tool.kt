@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab.tool
+package com.sri.aitoolcallinglab.agent
 
 interface Tool {
     val name: String

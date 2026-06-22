@@ -1,7 +1,7 @@
 package com.sri.aitoolcallinglab.tool.news
 
-import com.sri.aitoolcallinglab.tool.Tool
-import com.sri.aitoolcallinglab.tool.ToolExample
+import com.sri.aitoolcallinglab.agent.Tool
+import com.sri.aitoolcallinglab.agent.ToolExample
 
 class NewsTool(
     private val newsRepository: NewsRepository

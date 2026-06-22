@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val viewModel: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        val viewModel: MainViewModel =
+            ViewModelProvider(this, MainViewModel.Factory)[MainViewModel::class.java]
         setContent {
             AiToolCallingTheme {
                 ScreenContent(
@@ -56,6 +58,7 @@ fun ScreenContent(viewModel: MainViewModel) {
             )
         }
     ) { innerPadding ->
+        val uiState = viewModel.uiState.collectAsState().value
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -68,7 +71,7 @@ fun ScreenContent(viewModel: MainViewModel) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 state = promptTextFieldState,
-                enabled = !viewModel.isPending.value,
+                enabled = !uiState.isPending,
                 label = { Text(text = "Prompt") }
             )
             Button(
@@ -77,17 +80,17 @@ fun ScreenContent(viewModel: MainViewModel) {
                         prompt = promptTextFieldState.text.toString()
                     )
                 },
-                enabled = !viewModel.isPending.value
+                enabled = !uiState.isPending
             ) {
                 Text(
-                    text = if (viewModel.isPending.value) "Thinking..." else "Submit"
+                    text = if (uiState.isPending) "Thinking..." else "Submit"
                 )
             }
             MarkdownText(
                 modifier = Modifier.fillMaxWidth(),
                 markdown =
-                    if (viewModel.isPending.value) ""
-                    else viewModel.response.value
+                    if (uiState.isPending) ""
+                    else uiState.response
             )
         }
     }
@@ -98,7 +101,7 @@ fun ScreenContent(viewModel: MainViewModel) {
 fun Preview_ScreenContent() {
     AiToolCallingTheme {
         ScreenContent(
-            viewModel = MainViewModel()
+            viewModel = MainViewModel(ChatRunner())
         )
     }
 }
