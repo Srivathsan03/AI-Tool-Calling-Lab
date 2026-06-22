@@ -1,4 +1,4 @@
-# AI Tool Calling Lab
+# AI Tool Calling Lab – Exploring Tool Calling & Agent Architectures
 
 AI Tool Calling Lab is an Android application built for experimenting with LLM-powered tool calling, agent architectures, and external API integrations using Google's Gemini API.
 
@@ -8,11 +8,27 @@ This project was created as a hands-on learning laboratory for understanding how
 
 The goal is to explore real-world AI application patterns such as tool calling, agent workflows, function calling, ReAct agents, and Retrieval-Augmented Generation (RAG).
 
+## Screenshots
+
+<p>
+<img src="screenshot/Weather.png" width="250"/>
+<img src="screenshot/Currency.png" width="250"/>
+<img src="screenshot/NEWS.png" width="250"/>
+</p>
+
+## Screenshots
+
+| Weather Tool | Currency Tool | News Tool |
+|-------------|-------------|-------------|
+| ![Weather](screenshot/Weather.png) | ![Currency](screenshot/Currency.png) | ![News](screenshot/NEWS.png) |
+
 ## Features
 
 - Tool Calling Experiments
 - Multi-Tool Agent Architecture
+- Agent Execution Loop
 - Tool Registry & Tool Executor
+- Tool Metadata Driven Prompting
 - Calculator Tool
 - Weather Tool
 - Currency Tool
@@ -146,6 +162,46 @@ Gemini
 Final Response
 ```
 
+## Tool Selection Workflow
+
+The agent follows a two-step reasoning process:
+
+```text
+User Question
+    ↓
+Gemini selects a tool
+    ↓
+Tool executes
+    ↓
+Tool result returned to Gemini
+    ↓
+Gemini generates final answer
+```
+
+Example:
+
+User:
+```
+What's the weather in Chennai?
+```
+
+Agent:
+```
+TOOL: weather
+INPUT: Chennai
+```
+
+Tool:
+```
+Temperature: 34°C
+Condition: Sunny
+```
+
+Final Answer:
+```
+The current weather in Chennai is 34°C and sunny.
+```
+
 ### Implemented tools:
 
 | Tool | Implementation |
@@ -166,43 +222,56 @@ Final Response
 - [x] News Tool
 - [x] Tool Registry & Tool Executor Architecture
 - [x] Tool Selection Logic
+- [x] Tool Call Parsing
 - [x] Multi-Tool Agent
 - [x] Agent Loop
-- [x] Tool Selection Prompting
-- [x] Tool Call Parsing
 - [x] Markdown Rendering
-
-### In Progress
-
-- [ ] Function Calling
 
 ### Future Experiments
 
+- [ ] Function Calling
+- [ ] Structured Tool Arguments
+- [ ] Multi-Step Tool Execution
 - [ ] ReAct Agents
 - [ ] Agent Memory
 - [ ] Multi-Agent Systems
-- [ ] Multimodal Inputs
-- [ ] Local LLM Integration
 - [ ] MCP Integration
 - [ ] RAG Experiments
+- [ ] Local LLM Integration
 
 ## Project Structure
 
-- `MainActivity` - Application entry point.
-- `MainViewModel` - Manages UI state and AI interactions.
-- `GeminiRepository` - Handles Gemini API communication.
-- `Tool` - Defines the contract for application tools.
-- `ToolRegistry` - Stores available tools
-- `ToolExecutor` - Executes registered tools.
-- `CalculatorTool` - Example tool used for tool-calling experiments.
-- `WeatherTool` - Weather data retrieval
-- `CurrencyTool` - Currency conversion
-- `NewsTool` - Retrieves latest news headlines
-- `NewsRepository` - Handles Hacker News API communication
-- `Agent` - Orchestrates tool selection and execution workflows.
-- `ToolSelectionPromptBuilder` - Builds prompts used for tool selection.
-- `ToolCallParser` - Parses tool requests returned by the model.
+```text
+com.sri.aitoolcallinglab
 
-## License
-
-This project is licensed under the Apache License 2.0.
+├── agent
+│   ├── Agent
+│   ├── AgentResult
+│   ├── ToolCallParser
+│   └── ToolSelectionPromptBuilder
+│
+├── tool
+│   ├── Tool
+│   ├── ToolRegistry
+│   ├── ToolExecutor
+│   ├── ToolCall
+│   ├── ToolExample
+│   ├── calculator
+│   ├── currency
+│   ├── news
+│   └── weather
+│
+├── llm
+│   ├── AIModel
+│   ├── LlmClient
+│   ├── GeminiLlmClient
+│   └── GeminiRepository
+│
+├── chat
+│   └── ChatRunner
+│
+├── ui
+│   ├── MainActivity
+│   ├── MainViewModel
+│   └── ChatUiState
+```
