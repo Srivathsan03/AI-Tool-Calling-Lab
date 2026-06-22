@@ -22,6 +22,23 @@ The goal is to explore real-world AI application patterns such as tool calling, 
 |-------------|-------------|-------------|
 | ![Weather](screenshot/Weather.png) | ![Currency](screenshot/Currency.png) | ![News](screenshot/NEWS.png) |
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshot/Weather.png" width="250"/><br/>
+      <b>Weather Tool</b>
+    </td>
+    <td align="center">
+      <img src="screenshot/Currency.png" width="250"/><br/>
+      <b>Currency Tool</b>
+    </td>
+    <td align="center">
+      <img src="screenshot/NEWS.png" width="250"/><br/>
+      <b>News Tool</b>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 - Tool Calling Experiments
