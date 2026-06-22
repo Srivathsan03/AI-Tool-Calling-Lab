@@ -9,6 +9,12 @@ class CurrencyTool(
     override val name = "currency"
     override val description =
         "Converts currency from one to another. Expected format: amount FROM TO"
+    override val guidance = "Use currency for currency conversions."
+    override val examples = """
+        How much is 100 USD in INR?
+        TOOL: currency
+        INPUT: 100 USD INR
+    """.trimIndent()
 
     override suspend fun execute(input: String?): String {
         if (input == null) return "Invalid input"

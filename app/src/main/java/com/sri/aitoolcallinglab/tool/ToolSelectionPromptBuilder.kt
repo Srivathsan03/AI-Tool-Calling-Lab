@@ -11,6 +11,9 @@ object ToolSelectionPromptBuilder {
             tools.forEach { tool ->
                 appendLine("- ${tool.name}: ${tool.description}")
                 appendLine()
+                appendLine(tool.guidance)
+                appendLine(tool.examples)
+                appendLine()
             }
 
             appendLine("Rules:")
@@ -21,14 +24,8 @@ object ToolSelectionPromptBuilder {
             appendLine()
 
             appendLine("Do not explain your decision.")
-
-            appendLine("For calculator tool:")
-            appendLine("Always format expressions with spaces between numbers and operators.")
-            appendLine("Example: \"2 + 2\", not \"2+2\"")
-
-            appendLine("For weather tool:")
-            appendLine("Always format expressions with spaces between city, latitude and longitude.")
-            appendLine("Example: chennai x.00 y.00")
+            appendLine("Do not include markdown.")
+            appendLine("Do not include additional text.")
 
             appendLine("If no tool is needed, answer normally.")
         }

@@ -11,6 +11,8 @@ import com.sri.aitoolcallinglab.tool.weather.WeatherRepository
 import com.sri.aitoolcallinglab.tool.weather.WeatherTool
 
 class ChatRunner {
+
+    private val repository = GeminiRepository()
     private val toolRegistry = ToolRegistry(
         mapOf(
             "calculator" to CalculatorTool(),
@@ -24,7 +26,7 @@ class ChatRunner {
         prompt: String,
     ): String {
         val agent = Agent(
-            llmClient = GeminiLlmClient(repository = GeminiRepository()),
+            llmClient = GeminiLlmClient(repository = repository),
             toolRegistry = toolRegistry
         )
         return agent.run(prompt)

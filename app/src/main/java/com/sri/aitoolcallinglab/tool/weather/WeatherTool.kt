@@ -5,9 +5,16 @@ import com.sri.aitoolcallinglab.tool.Tool
 class WeatherTool(
     private val weatherRepository: WeatherRepository
 ) : Tool {
+
     override val name = "weather"
     override val description =
         "Retrieves weather data for a given city. Expected format: city latitude longitude"
+    override val guidance = "Use weather for weather-related questions."
+    override val examples = """
+        What is the weather in Chennai?
+        TOOL: weather
+        INPUT: Chennai x.00 y.00
+    """.trimIndent()
 
     override suspend fun execute(input: String?): String {
         val parts = input?.split(" ")
