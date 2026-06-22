@@ -1,5 +1,7 @@
 package com.sri.aitoolcallinglab.agent
 
+import com.sri.aitoolcallinglab.tool.Tool
+
 object ToolSelectionPromptBuilder {
 
     fun build(tools: List<Tool>): String {

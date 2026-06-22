@@ -1,7 +1,7 @@
 package com.sri.aitoolcallinglab.tool.calculator
 
-import com.sri.aitoolcallinglab.agent.Tool
-import com.sri.aitoolcallinglab.agent.ToolExample
+import com.sri.aitoolcallinglab.tool.Tool
+import com.sri.aitoolcallinglab.tool.ToolExample
 
 class CalculatorTool : Tool {
 

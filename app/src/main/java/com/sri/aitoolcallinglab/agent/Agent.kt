@@ -1,7 +1,8 @@
 package com.sri.aitoolcallinglab.agent
 
 import android.util.Log
-import com.sri.aitoolcallinglab.LlmClient
+import com.sri.aitoolcallinglab.llm.LlmClient
+import com.sri.aitoolcallinglab.tool.ToolRegistry
 
 const val TAG = "Agent"
 

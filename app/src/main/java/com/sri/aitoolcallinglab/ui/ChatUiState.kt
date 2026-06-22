@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.ui
 
 data class ChatUiState(
     val response: String = "",

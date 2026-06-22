@@ -1,8 +1,10 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.chat
 
 import com.sri.aitoolcallinglab.agent.Agent
 import com.sri.aitoolcallinglab.agent.AgentResult
-import com.sri.aitoolcallinglab.agent.ToolRegistry
+import com.sri.aitoolcallinglab.llm.GeminiLlmClient
+import com.sri.aitoolcallinglab.llm.GeminiRepository
+import com.sri.aitoolcallinglab.tool.ToolRegistry
 import com.sri.aitoolcallinglab.tool.calculator.CalculatorTool
 import com.sri.aitoolcallinglab.tool.currency.CurrencyRepository
 import com.sri.aitoolcallinglab.tool.currency.CurrencyTool

@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import com.sri.aitoolcallinglab.chat.ChatRunner
+import com.sri.aitoolcallinglab.R
 import com.sri.aitoolcallinglab.ui.theme.AiToolCallingTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
 

@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab.agent
+package com.sri.aitoolcallinglab.tool
 
 class ToolRegistry(
     private val tools: Map<String, Tool>

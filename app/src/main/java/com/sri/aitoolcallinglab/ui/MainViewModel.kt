@@ -1,8 +1,9 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.sri.aitoolcallinglab.chat.ChatRunner
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

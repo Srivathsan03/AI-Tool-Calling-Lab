@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.llm
 
 enum class AIModel(val modelId: String) {
     // Gemini 3.x Series (Latest Frontier)

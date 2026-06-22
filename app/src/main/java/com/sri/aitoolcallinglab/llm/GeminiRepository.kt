@@ -1,9 +1,11 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.llm
 
 import com.google.genai.Client
 import com.google.genai.errors.ClientException
 import com.google.genai.types.GenerateContentConfig
+import com.sri.aitoolcallinglab.BuildConfig
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -36,7 +38,7 @@ class GeminiRepository {
                 if (e.code() == 429) {
                     if (attempt < maxAttempts - 1) {
                         attempt++
-                        kotlinx.coroutines.delay(currentDelay.milliseconds)
+                        delay(currentDelay.milliseconds)
                         currentDelay *= 2
                         continue
                     }

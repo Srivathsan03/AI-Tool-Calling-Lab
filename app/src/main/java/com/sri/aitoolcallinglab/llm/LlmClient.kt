@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.llm
 
 interface LlmClient {
 

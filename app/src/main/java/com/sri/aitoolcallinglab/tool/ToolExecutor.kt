@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab.agent
+package com.sri.aitoolcallinglab.tool
 
 class ToolExecutor(
     private val registry: ToolRegistry

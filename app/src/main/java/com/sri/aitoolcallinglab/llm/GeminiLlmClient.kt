@@ -1,4 +1,4 @@
-package com.sri.aitoolcallinglab
+package com.sri.aitoolcallinglab.llm
 
 import com.google.genai.types.Content
 import com.google.genai.types.GenerateContentConfig
