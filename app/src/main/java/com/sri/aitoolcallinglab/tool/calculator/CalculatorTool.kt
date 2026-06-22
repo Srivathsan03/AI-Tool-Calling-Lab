@@ -1,6 +1,7 @@
 package com.sri.aitoolcallinglab.tool.calculator
 
 import com.sri.aitoolcallinglab.tool.Tool
+import com.sri.aitoolcallinglab.tool.ToolExample
 
 class CalculatorTool : Tool {
 
@@ -8,11 +9,13 @@ class CalculatorTool : Tool {
     override val description =
         "Performs basic math calculations. Expected format: number symbol number"
     override val guidance = "Use calculator for arithmetic and mathematical expressions."
-    override val examples = """
-        What is 2 + 2?
-        TOOL: calculator
-        INPUT: 2 + 2
-    """.trimIndent()
+    override val examples = listOf(
+        ToolExample(
+            userInput = "What is 2 + 2?",
+            toolName = "calculator",
+            toolInput = "2 + 2"
+        )
+    )
 
     override suspend fun execute(input: String?): String {
         if (input.isNullOrBlank()) {

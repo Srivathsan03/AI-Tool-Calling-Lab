@@ -12,7 +12,13 @@ object ToolSelectionPromptBuilder {
                 appendLine("- ${tool.name}: ${tool.description}")
                 appendLine()
                 appendLine(tool.guidance)
-                appendLine(tool.examples)
+                tool.examples.forEach { toolExample ->
+                    appendLine("Example:")
+                    appendLine("User: ${toolExample.userInput}")
+                    appendLine("TOOL: ${toolExample.toolName}")
+                    appendLine("INPUT: ${toolExample.toolInput}")
+                    appendLine()
+                }
                 appendLine()
             }
 

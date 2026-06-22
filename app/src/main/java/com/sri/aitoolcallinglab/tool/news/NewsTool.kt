@@ -1,6 +1,7 @@
 package com.sri.aitoolcallinglab.tool.news
 
 import com.sri.aitoolcallinglab.tool.Tool
+import com.sri.aitoolcallinglab.tool.ToolExample
 
 class NewsTool(
     private val newsRepository: NewsRepository
@@ -9,11 +10,13 @@ class NewsTool(
     override val name = "news"
     override val description = "Retrieves top hacker news stories"
     override val guidance = "Use news for current news and headlines."
-    override val examples = """
-        Latest news headlines
-        TOOL: news
-        INPUT: (not needed)
-    """.trimIndent()
+    override val examples = listOf(
+        ToolExample(
+            userInput = "What are the latest news?",
+            toolName = "news",
+            toolInput = "(not needed)"
+        )
+    )
 
     override suspend fun execute(input: String?): String {
         val topNews = newsRepository.getTopNews()

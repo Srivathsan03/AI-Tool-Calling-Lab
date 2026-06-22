@@ -1,6 +1,7 @@
 package com.sri.aitoolcallinglab.tool.currency
 
 import com.sri.aitoolcallinglab.tool.Tool
+import com.sri.aitoolcallinglab.tool.ToolExample
 
 class CurrencyTool(
     private val currencyRepository: CurrencyRepository
@@ -10,11 +11,13 @@ class CurrencyTool(
     override val description =
         "Converts currency from one to another. Expected format: amount FROM TO"
     override val guidance = "Use currency for currency conversions."
-    override val examples = """
-        How much is 100 USD in INR?
-        TOOL: currency
-        INPUT: 100 USD INR
-    """.trimIndent()
+    override val examples = listOf(
+        ToolExample(
+            userInput = "How much is 100 USD in INR?",
+            toolName = "currency",
+            toolInput = "100 USD INR"
+        )
+    )
 
     override suspend fun execute(input: String?): String {
         if (input == null) return "Invalid input"
