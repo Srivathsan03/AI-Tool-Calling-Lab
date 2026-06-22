@@ -22,7 +22,7 @@ class Agent(
             toolResult = null
         )
         val tool = toolRegistry.findTool(toolCall.tool) ?: return AgentResult(
-            answer = "Tool Not Found",
+            answer = llmResponse, // Tool Not Found
             selectedTool = null,
             toolInput = null,
             toolResult = null
