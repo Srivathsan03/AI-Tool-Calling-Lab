@@ -9,5 +9,5 @@ interface NewsApi {
     suspend fun getTopStories(): List<Long>
 
     @GET("item/{id}.json")
-    suspend fun getStory(@Path("id") id:Long): NewsStoryResp
+    suspend fun getStory(@Path("id") id: Long): NewsStoryResp
 }
